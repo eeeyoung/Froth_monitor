@@ -2,6 +2,7 @@ import tkinter as tk
 import cv2
 import numpy as np
 import openpyxl as op
+import csv
 
 from ROI_and_arrow_drawing  import crop_box, arrow
 from image_analysis         import image_analysis
@@ -77,14 +78,6 @@ class xy_canvas:
                                                 width=4,
                                                 fill=color,
                                                 tags='lines')
-                
-                        # self.xy_canvas.create_line(self.width-k-1,
-                        #                            vel_list[-k-1]+self.starting_point,
-                        #                            self.width-k-2,
-                        #                            vel_list[-k-2]+self.starting_point,
-                        #                            width=4,
-                        #                            fill=color,
-                        #                            tags='lines')
                         
                         if k == self.width:
                             break
@@ -113,8 +106,15 @@ class xy_canvas:
             temp_list.append(vel)
         return temp_list
 
+    def new_run(self):
+        self.xy_canvas.delete('lines')
+        self.biggest_value_list = []
+        self.number_of_lines = 0
 
-    
+        self.xy_graph_dict = {}
+        self.vel_list_dict = {}
+        self.temp = None
+        
 class main_GUI:
     def __init__(self):
         # Basic video/camera properties
@@ -139,7 +139,7 @@ class main_GUI:
         self.ResReduction = 2
             
         # Initialize a excel databook
-        self.data_book = op.Workbook()                  # Create a excel workbook for storing data 
+        # self.data_book = op.Workbook()                  # Create a excel workbook for storing data 
         
         # Overflow direction setting
         self.arrow = None                               # Create to store the instance of the arrow
@@ -165,13 +165,12 @@ class main_GUI:
         self.selected_camera = tk.StringVar()
         self.available_cameras = {}
         self.file_menu.add_separator()
-        self.file_menu.add_command(label='Exit')
         self.menu_bar.add_cascade(label='Import', menu=self.file_menu)
         # Second Menu - Export
         self.export_routine = './'                      # The location of ROI data to be stored
         self.datetime = str(datetime.now())
         self.export_name = tk.StringVar()
-        self.export_name.set(f'%s.xlsx'%self.datetime[:-16])
+        self.export_name.set(f'%s'%self.datetime[:-16])
         self.if_exported = False
         
         self.export_menu = tk.Menu(self.menu_bar, tearoff=False)
@@ -181,7 +180,7 @@ class main_GUI:
         # Define buttons
         for i in range(0, 10):
             for k in range(0, 8):
-                self.button = tk.Button(self.root, text='')
+                self.button = tk.Label(self.root, text='')
                 self.button.config(height=2, width=15)
                 self.button.grid(row=i, column=k, padx=2, pady=2)
         
@@ -198,7 +197,7 @@ class main_GUI:
         self.button.config(height=2, width=32)
         self.button.grid(row=2, column=0, padx = 2, pady= 2, columnspan=2)
 
-        self.button = tk.Button(self.root, text='Save and Quit', command=self.excel_file_output)
+        self.button = tk.Button(self.root, text='Save and end playing', command=self.excel_file_output)
         self.button.config(height=2, width=32)
         self.button.grid(row=4, column=0, padx = 2, pady= 2, columnspan=2)
         
@@ -687,24 +686,61 @@ class main_GUI:
             self.crop_box_ongoing(event)
             
     def excel_file_output(self):
-        if self.if_exported == True:
-            return
-        
-        self.export_name = self.export_routine + str('/%s'%self.export_name.get())
+
+        filename_prefix = self.export_routine + str('/%s'%self.export_name.get())
         for i in range (1, self.number_of_ROIs+1):
             ROI_name = f'ROI_%i'%i
-            if i == 1:
-                data_sheet = self.data_book.active
-                data_sheet.title = ROI_name
-            else:
-                data_sheet = self.data_book.create_sheet(title=ROI_name)
-            for row in self.ROIs_dict[ROI_name].excel_file_data:
-                data_sheet.append(row)
-                        
-        self.data_book.save(self.export_name+'.xlsx')
-        self.if_exported = True
-        
-        self.root.destroy()
+            current_csv_name = filename_prefix + ROI_name + str('.csv')
+            with open(current_csv_name, 'w') as csvfile:
+                csvwriter = csv.writer(csvfile)
+                print(self.ROIs_dict[ROI_name].excel_file_data)
+                csvwriter.writerows(self.ROIs_dict[ROI_name].excel_file_data)
 
+        self.if_exported = True
+        self.quit_or_new_one()
+
+    def quit_or_new_one(self):
+        self.popup = tk.Toplevel(self.root)
+        self.popup.title('Warning')
+        
+        text = 'File successfully saved. Quit program or start a new run?'
+        text_label = tk.Label(self.popup, text=text)
+        text_label.pack()
+        close_button = tk.Button(self.popup, text='Quit', command=self.root.destroy)
+        close_button.pack()
+        new_button = tk.Button(self.popup, text='New run', command=self.start_new_run)
+        new_button.pack()
+    
+    def start_new_run(self):
+        self.popup.destroy()
+
+        # Canvas reset
+        self.video_canvas.delete('all')
+        self.xy_canvas.new_run()
+        
+        # ROI reset
+        self.if_ROI = False                             # If any ROI exists
+        self.if_cropping_box = False                    # If cropping ROI is ongoing
+        self.ROI_drawing = None                         # Create to store the new instance of cropping box
+        self.ROI_coordinates_list = []                  # Store the coordinates of every ROI
+        self.number_of_ROIs = 0                         # Number of ROIs
+        self.ROIs_dict = {}  
+        
+        # Arrow reset
+        self.arrow = None                               # Create to store the instance of the arrow
+                                                        # that indicates overflow direction
+        self.if_arrow = False                           # If any direction of flow exists
+        self.arrow_drawing = False                      # If the arrow drawing is in progress
+        self.use_default_direction = False   
+        self.virtual_overflow_direction = -0.5*np.pi
+        
+        # Video reset
+        self.ret = None                                 # If any frame is being read
+        self.frame = None                               # The frame is currently reading
+        self.video_capture = None                       # Store the videocapture variable of cv2
+        self.canvas_image = None                        # Image to be displayed on main canvas
+        self.if_video_playing = False                   # If the video is playing
+        self.if_video_imported = False                  # If video is imported
+        self.if_camera_imported = False  
         
 main_GUI()

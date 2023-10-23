@@ -250,7 +250,7 @@ class image_analysis(object):
         if if_outlier == True:
             OUTLIER = 'YES'
         else:
-            OUTLIER = ''
+            OUTLIER = 'No'
             
         if self.frame_count == 1:
             self.excel_file_data.append(['FRAME COUNT', 
@@ -262,11 +262,10 @@ class image_analysis(object):
                                          ])
             
             self.excel_file_data.append([self.frame_count,
-                                        '',
-                                        '',
-                                        '',
-                                        '',
-                                        '',
+                                        'None',
+                                        'None',
+                                        'None',
+                                        'None',
                                         self.average_velocity
                                         ])
 
@@ -277,7 +276,6 @@ class image_analysis(object):
                                         self.move_vector[1],
                                         current_vel,
                                         OUTLIER,
-                                        '',
                                         self.average_velocity
                                         ])
 
