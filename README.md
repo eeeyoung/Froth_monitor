@@ -1,7 +1,7 @@
 # Froth_monitor - A program for tracking the movement of froths of froth flotation in mineral processing
 ### Work in Progress
 ### Last update: 23rd Oct 2023
-### Update function: Save data and start a new run
+Update function: Save data and start a new run
 
 ### Check the 'package_requirements.txt' to see the requirements for running this source code. If missing, you can directly use pip install command in the terminal to install, the name of the package is the same as it shows in this text file.
 
