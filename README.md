@@ -1,17 +1,49 @@
 # Froth_monitor - A program for tracking the movement of froths of froth flotation in mineral processing
+
+# Update: 21st Nov 2024
 ### Work in Progress
-### Last update: 23rd Oct 2023
 
-### Check the 'package_requirements.txt' to see the requirements for running this source code. If missing, you can directly use pip install command in the terminal to install, the name of the package is the same as it shows in this text file.
+A dynamic and interactive application designed to analyze and visualize froth movement from video data using advanced image processing and data visualization techniques.
 
-# To be realised (* means already done)
+# Features
+## 1. Arrow Direction Analysis:
+
+Draw, lock, and display an arrow indicating the direction of froth overflow.
+Customizable and adjustable arrow direction for flexible analysis.
+## 2. Region of Interest (ROI) Detection:
+
+Draw multiple ROIs on the video canvas.
+Real-time movement analysis for each ROI.
+Axis visualization (X and Y axes) within each ROI to track movement.
+## 3. Video Processing:
+
+Frame-by-frame video display with integrated image analysis.
+Supports both local video files and live camera input.
+## 4. Data Export:
+
+Export analysis results as Excel files.
+Customizable file naming and export directory.
+Separate sheets for each ROI in the Excel output.
+## 5. Replay and Reset:
+
+Save and end the current session, clearing ROIs and resetting the interface for a new analysis.
+## 6. Visualizations:
+
+Real-time animation of velocity changes over frames.
+Dedicated arrow canvas to display locked arrow direction.
+
+__________________________________________________________________________________________________________________________________________________________________
+# Update: 23rd Oct 2023
+### Work in Progress
+
+### To be realised (* means already done)
 1. csv*
 2. stop and restart new databook*
 3. angle in degrees with manual typing (pre-set values choices)
 4. programmed video with disappearing bubbles
 
 
-### How to run the program from source code
+# How to run the program from source code
 
 1. Directly run the 'main_GUI.py' file in a suitable python environment
 
