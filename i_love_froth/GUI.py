@@ -7,6 +7,8 @@ import pyqtgraph as pg
 import sys
 import cv2
 import csv
+import json
+import os
 import numpy as np
 from datetime import datetime
 from openpyxl import Workbook
@@ -291,7 +293,7 @@ class Export:
             
             # Prepare the full file path
             file_path_csv = f"{self.export_directory}/{self.export_filename}.csv"
-            file_path_json = f"{self.export_directory}/{self.export_filename}.json"
+            # file_path_json = f"{self.export_directory}/{self.export_filename}.json"
 
             # Step 1: Collect data
             export_data = self.collect_export_data(rois, arrow_angle)
@@ -302,7 +304,7 @@ class Export:
             QMessageBox.information(
                 self.parent,
                 "Export Successful",
-                f"Data successfully exported:\n- CSV: {file_path_csv}\n- JSON: {file_path_json}",
+                f"Data successfully exported:\n- CSV: {file_path_csv}\n-",
             )
 
         except Exception as e:
@@ -364,9 +366,127 @@ class Export:
         # Save the workbook
         wb.save(file_path)
 
-            
+class AutoSaver:
+    def __init__(self, 
+                 file_path = "data/auto_save",
+                 file_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")):
         
-   
+        self.file_path = f"{file_path}/{file_name}.json"
+        self.data = {
+            "arrow_direction": None,
+            "roi_data": []
+        }
+    
+    def update_arrow_direction(self, arrow_angle):
+        self.data["arrow_direction"] = float(arrow_angle)  # Store as float
+    
+    def add_frame_data(self, roi_index, frame_index, velocity):
+        # Ensure the ROI exists
+        while len(self.data["roi_data"]) <= roi_index:
+            self.data["roi_data"].append({"ROI Index": len(self.data["roi_data"]) + 1, "Movement Data": []})
+
+        velocity = float(velocity)
+        roi_index = int(roi_index)
+        frame_index = int(frame_index)
+        
+        # Append movement data
+        self.data["roi_data"][roi_index]["Movement Data"].append({
+            "Frame Index": frame_index,
+            "Velocity": velocity
+        })
+        self.save_to_file()  # Save every update
+    
+    def save_to_file(self):
+        try:
+            with open(self.file_path, "w") as f:
+                json.dump(self.data, f, indent=4)
+        except TypeError as e:
+            print(f"Serialization error: {e}")
+            print(f"Problematic data: {self.data}")
+            raise
+    
+    def load_from_file(self):
+        if os.path.exists(self.file_path):
+            with open(self.file_path, "r") as f:
+                self.data = json.load(f)
+                return self.data
+        return None        
+
+class VideoRecorder:
+    def __init__(self, file_name="./recording", fps=30, frame_size=(640, 480)):
+        """
+        Initialize the VideoRecorder.
+        
+        Args:
+            output_directory (str): Directory to save the video file.
+            filename_prefix (str): Prefix for the video file name.
+            fps (int): Frames per second for the recording.
+            frame_size (tuple): Width and height of the video frames.
+        """
+        # self.output_directory = output_directory
+        # self.filename_prefix = filename_prefix
+        self.file_name = file_name
+        self.fps = fps
+        self.frame_size = frame_size
+        self.recording = False
+        self.writer = None
+        self.filepath = None
+
+    def start_recording(self):
+        """
+        Start recording video to a file.
+        """
+        # if not os.path.exists(self.output_directory):
+        #     os.makedirs(self.output_directory)
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.filepath = f"{self.file_name}.mp4"
+
+        self.writer = cv2.VideoWriter(
+            self.filepath,
+            cv2.VideoWriter_fourcc(*'XVID'),
+            self.fps,
+            self.frame_size
+        )
+        
+        self.recording = True
+        print(f"Recording started. Saving to {self.filepath}")
+
+    def write_frame(self, frame):
+        """
+        Write a single frame to the video file.
+        
+        Args:
+            frame: The video frame to write.
+        """
+        if self.recording and self.writer.isOpened():
+            self.writer.write(frame)
+            print("Frame written to video file")
+        else:
+            print("Writer is not opened or recording is stopped")
+
+    def stop_recording(self):
+        """
+        Stop recording and release resources.
+        """
+        if self.writer:
+            self.writer.release()
+            self.writer = None
+        self.recording = False
+        print(f"Recording stopped. Video saved at {self.filepath}")
+
+    def is_recording(self):
+        """
+        Check if the recorder is currently recording.
+        
+        Returns:
+            bool: True if recording, False otherwise.
+        """
+        return self.recording
+        
+        
+        
+        
 class MainGUI(QMainWindow):
     def __init__(self):
         """
@@ -395,7 +515,6 @@ class MainGUI(QMainWindow):
         self.current_pixmap = None  # Store the current video frame as QPixmap for real-time updates
         
         # Arrow drawing
-        
         self.arrow_angle = np.pi / 2
         self.arrow_locked = False # Lock status for arrow direction
         self.drawing_arrow = False  # Flag to indicate if arrow is being drawn
@@ -403,6 +522,15 @@ class MainGUI(QMainWindow):
         
         # Export setting
         self.export = Export(self)
+        
+        # Video recording
+        self.recording = False
+        self.video_writer = None
+        
+        # Auto Save
+        self.auto_saver = AutoSaver()
+        self.auto_saver.load_from_file
+        
         
         # Define UI elements
         self.initUI()
@@ -423,7 +551,7 @@ class MainGUI(QMainWindow):
         main_layout.addLayout(grid_layout)
 
         # Buttons
-        self.add_buttons(grid_layout)
+        # self.add_buttons(grid_layout)
 
         # Video canvas placeholder
         self.add_canvas_placeholder(grid_layout)
@@ -436,12 +564,16 @@ class MainGUI(QMainWindow):
         # ROI Movements Canvas
         self.add_ROI_movement_placeholder(grid_layout)
         
+
+        
         # Overflow direction value label
         self.direction_textbox = QLineEdit(self)
         self.direction_textbox.setText(f"{np.degrees(self.arrow_angle):.2f}")  # Default to 90 degrees
         self.direction_textbox.editingFinished.connect(self.manual_arrow_angle_update)
         self.direction_textbox.setAlignment(Qt.AlignmentFlag.AlignCenter)
         grid_layout.addWidget(self.direction_textbox, 3, 1, 1, 1)
+        
+        self.add_buttons(grid_layout)
 
     def createMenuBar(self):
         menu_bar = QMenuBar(self)
@@ -467,9 +599,22 @@ class MainGUI(QMainWindow):
         self.pause_play_button.clicked.connect(self.pause_play)
         layout.addWidget(self.pause_play_button, 2, 0, 1, 2)
 
+        self.confirm_arrow_button = QPushButton("Confirm Arrow Direction", self)
+        self.confirm_arrow_button.clicked.connect(self.asking_lock_arrow_direction)
+        layout.addWidget(self.confirm_arrow_button, 4, 0, 1, 2)
+        
         self.save_end_button = QPushButton("Save and End Playing", self)
         self.save_end_button.clicked.connect(self.save_end)
-        layout.addWidget(self.save_end_button, 4, 0, 1, 2)
+        layout.addWidget(self.save_end_button, 5, 0, 1, 2)
+        
+        self.start_record_button = QPushButton("Start Recording", self)
+        self.start_record_button.clicked.connect(self.start_recording)
+        self.start_record_button.setStyleSheet("background-color: green; color: white;")
+        layout.addWidget(self.start_record_button, 7, 0, 1, 2)
+
+        self.stop_record_button = QPushButton("Stop Recording", self)
+        self.stop_record_button.clicked.connect(self.stop_recording)
+        layout.addWidget(self.stop_record_button, 8, 0, 1, 2)
 
     def add_canvas_placeholder(self, layout):
         
@@ -516,6 +661,7 @@ class MainGUI(QMainWindow):
 
     def message_boxes(self, event):
         if event == "Confirm Direction":
+
             reply = QMessageBox.question(
                     self,
                     "Confirm Overflow Direction",
@@ -530,7 +676,7 @@ class MainGUI(QMainWindow):
                 return    
             
         if event == "Arrow Locked":
-            QMessageBox.warning(self, "Arrow already confirmed")
+            QMessageBox.warning(self, "Warning", "Overflow Direction already locked")
             return    
         
     def start_drawing_arrow(self):
@@ -554,9 +700,52 @@ class MainGUI(QMainWindow):
                 self.timer.start(30)
 
     def load_camera_dialog(self):
-        # Implementation similar to original code
-        pass
+        """
+        Opens a dialog to select and load an available camera.
+        """
+        available_cameras = []
+        for index in range(10):  # Check up to 10 camera indices
+            cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+            if cap.isOpened():
+                available_cameras.append(f"Camera {index}")
+                cap.release()
 
+        if not available_cameras:
+            QMessageBox.critical(self, "Error", "No cameras detected!")
+            return
+
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Select Camera")
+        dialog.setMinimumWidth(300)
+
+        layout = QVBoxLayout(dialog)
+
+        # Camera selection dropdown
+        camera_combo = QComboBox(dialog)
+        camera_combo.addItems(available_cameras)
+        layout.addWidget(camera_combo)
+
+        # Confirm button
+        confirm_button = QPushButton("Load Camera", dialog)
+        confirm_button.clicked.connect(lambda: self.load_selected_camera(camera_combo, dialog))
+        layout.addWidget(confirm_button)
+
+        dialog.exec()
+
+    def load_selected_camera(self, camera_combo, dialog):
+        """
+        Loads the selected camera based on user input.
+        """
+        selected_camera_index = int(camera_combo.currentText().split()[-1])
+        self.video_capture = cv2.VideoCapture(selected_camera_index, cv2.CAP_DSHOW)
+        if not self.video_capture.isOpened():
+            QMessageBox.critical(self, "Error", f"Could not open Camera {selected_camera_index}!")
+        else:
+            QMessageBox.information(self, "Camera Loaded", f"Camera {selected_camera_index} is now active.")
+            self.playing = True
+            self.timer.start(30)
+            dialog.accept()
+            
     def pause_play(self):
         
         if self.video_capture is None or not self.video_capture.isOpened():
@@ -577,19 +766,29 @@ class MainGUI(QMainWindow):
             if not ret:
                 self.timer.stop()
                 return
-
+            
+            height, width, _ = frame.shape
+            self.frame_size = (width, height)
+            
+            if self.video_writer is not None:
+                self.video_writer.write_frame(frame)
+            
             for i, roi in enumerate(self.rois):
                 x, y, w, h = roi.rect.x(), roi.rect.y(), roi.rect.width(), roi.rect.height()
                 roi_frame = frame[y:y+h, x:x+w]
 
                 # Perform analysis and update cross position
                 avg_flow_x, avg_flow_y = roi.analysis_module.analyze(roi_frame)
+                
+                
+                
                 if avg_flow_x is not None and avg_flow_y is not None:
+                    self.auto_save(roi, i)
                     roi.update_cross_position(avg_flow_x, avg_flow_y)
 
                 roi.draw_on_frame(frame, i)
                 roi.update_scrolling_axis(self.movement_buffers, self.movement_curves, self.max_frames, self.plot_widget)
-            
+
             # Convert frame to RGB and display in QLabel
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             height, width, channel = frame.shape
@@ -632,7 +831,10 @@ class MainGUI(QMainWindow):
             end = self.adjust_mouse_position(event.pos())
             start = self.current_roi_start
             self.current_roi_rect = QRect(start, end)
-            if self.current_roi_rect.width() > 0 and self.current_roi_rect.height() > 0:
+            if (self.current_roi_rect.width() > 0 and 
+                self.current_roi_rect.height() > 0 and 
+                start.x() >= 0 and start.y() >= 0 and 
+                end.x() >= 0 and end.y() >= 0):
                 new_roi = ROI(self.current_roi_rect,
                               self.arrow.arrow_dir_x,
                               self.arrow.arrow_dir_y)  
@@ -678,6 +880,10 @@ class MainGUI(QMainWindow):
         return QPoint(adjusted_x, adjusted_y)
     
     def update_overflow_direction_textbox(self):
+        if self.arrow_locked:
+            self.message_boxes("Arrow Locked")
+            return
+        
         if self.arrow:
             self.arrow_angle = self.arrow.angle
             self.direction_textbox.setText(f"{np.degrees(self.arrow_angle):.2f}")
@@ -728,7 +934,15 @@ class MainGUI(QMainWindow):
             QMessageBox.information(self, "Direction Updated", f"Overflow direction set to {np.degrees(self.arrow_angle):.2f}°.")
         except ValueError:
             QMessageBox.warning(self, "Invalid Input", "Please enter a valid numeric value for the overflow direction.")
+
+    def asking_lock_arrow_direction(self):
+        if self.arrow_locked:
+            self.message_boxes("Arrow Locked")
+            return
             
+        self.message_boxes("Confirm Direction")
+        
+        
     def lock_arrow_direction(self):
         """
         Lock the arrow direction, preventing further modifications.
@@ -740,10 +954,56 @@ class MainGUI(QMainWindow):
             self.arrow.angle = self.arrow_angle
             self.arrow.set_displaying_preset(self.video_canvas_label)
             self.arrow.update_arrow_canvas()
+            self.auto_saver.update_arrow_direction(self.arrow_angle)
             QMessageBox.information(self, "Direction Locked", f"Overflow direction locked at {np.degrees(self.arrow_angle):.2f}°.")
         except ValueError:
             QMessageBox.warning(self, "Invalid Input", "Please enter a valid numeric value for the overflow direction.")
 
+    def start_recording(self):
+        if not self.video_capture or not self.video_capture.isOpened():
+            QMessageBox.warning(self, "Warning", "No active video feed to record.")
+            return
+
+        # Configure the video writer
+        file_name = QFileDialog.getSaveFileName(self, "Save Video", "", "Video Files (*.mp4 *.avi)")[0]
+        if not file_name:
+            return  # User canceled
+        
+        print(self.video_canvas_label.width())
+        print(int(self.video_canvas_label.height()))
+        self.video_writer = VideoRecorder(file_name, frame_size = self.frame_size)
+        self.video_writer.start_recording()
+        self.recording = True
+        
+        # fourcc = cv2.VideoWriter_fourcc(*"mp4v")  # Codec for .mp4 files
+        # fps = int(self.video_capture.get(cv2.CAP_PROP_FPS)) or 30  # Fallback to 30 FPS
+        # frame_width = int(self.video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+        # frame_height = int(self.video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+        # self.video_writer = cv2.VideoWriter(file_name, fourcc, fps, (frame_width, frame_height))
+        # self.recording = True
+        
+        QMessageBox.information(self, "Recording Started", f"Recording to {file_name}")
+    
+    def stop_recording(self):
+        if self.recording and self.video_writer:
+            self.video_writer.stop_recording()
+            # self.video_writer.release()
+            self.video_writer = None
+            self.recording = False
+            QMessageBox.information(self, "Recording Stopped", "Video recording has been saved.")
+    
+    def auto_save(self, roi, roi_index):
+        velocity = roi.analysis_module.velocity_history[-1]
+        frame_index = roi.analysis_module.get_frame_count()
+        self.auto_saver.add_frame_data(roi_index, frame_index, velocity)
+    
+    def close_event(self, event):
+        
+        if self.video_writer:
+            self.video_writer.release()
+        super().closeEvent(event)
+      
     def save_end(self):
         try:
             # Step 1: Save analysis results
@@ -752,33 +1012,6 @@ class MainGUI(QMainWindow):
                 return
 
             self.export_data()
-            
-            # Step 2: Save session state
-            # session_data = {
-            #     "arrow_direction": np.degrees(self.arrow.arrow_angle),
-            #     "roi_data": [
-            #         {
-            #             "ROI Index": i + 1,
-            #             "Rectangle": {
-            #                 "x": roi.rect.x(),
-            #                 "y": roi.rect.y(),
-            #                 "width": roi.rect.width(),
-            #                 "height": roi.rect.height(),
-            #             },
-            #             "Analysis Results": roi.analysis_module.get_results(),
-            #         }
-            #         for i, roi in enumerate(self.rois)
-            #     ],
-            #     "export_settings": {
-            #         "directory": self.export.export_directory,
-            #         "filename": self.export.export_filename,
-            #     },
-            # }
-            
-            # session_file = f"{self.export.export_directory}/{self.export.export_filename}_session.json"
-
-            # with open(session_file, "w") as f:
-            #     json.dump(session_data, f, indent=4)
 
             # Step 3: Stop video playback
             self.timer.stop()
@@ -799,14 +1032,11 @@ class MainGUI(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Save Failed", f"An error occurred while saving data: {e}")
 
-            
-    
     def export_data(self):
         """
         Handles exporting data for the program.
         """
         self.export.excel_resutls(self.rois, self.arrow_angle)
-
 
     def reset_application(self):
         """
@@ -833,3 +1063,12 @@ if __name__ == "__main__":
     window = MainGUI()
     window.show()
     sys.exit(app.exec())
+
+
+# Save all the data from beginning - json, in case of crashing or sth else
+# Before running, finish setup of export setting, roi drawing, overflow_direction, and arrow direction
+
+
+# Save the real-time video (as option for user) ?
+
+# Combination of software & variographic analysis?

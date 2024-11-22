@@ -13,6 +13,7 @@ class VideoAnalysisModule:
         self.arrow_dir_y = arrow_dir_y
         
     def analyze(self, current_frame):
+        
         # Analyze the given frame for changes in x and y directions
         if self.previous_frame is None:
             # If there's no previous frame, store the current frame and return
@@ -24,7 +25,7 @@ class VideoAnalysisModule:
         gray_previous = cv2.cvtColor(self.previous_frame, cv2.COLOR_BGR2GRAY)
 
         # Calculate dense optical flow using Farneback method
-        flow = cv2.calcOpticalFlowFarneback(gray_previous, gray_current, None, 0.5, 3, 60, 3, 7, 1.5, 0)
+        flow = cv2.calcOpticalFlowFarneback(gray_previous, gray_current, None, 0.5, 3, 25, 3, 7, 1.5, 0)
 
         # Extract flow components in x and y directions
         flow_x = flow[..., 0]
@@ -46,9 +47,11 @@ class VideoAnalysisModule:
         
 
         self.current_velocity: float = avg_flow_x * self.arrow_dir_x + avg_flow_y * self.arrow_dir_y
-        print("X_Velo:", avg_flow_x, "Y_Velo:", avg_flow_y, "Current_Velo:", self.current_velocity)
         return self.current_velocity
     
+    def get_frame_count(self):
+        return len(self.velocity_history)
+        
     def get_results(self):
         # Return all stored delta pixel results
         return self.velocity_history
