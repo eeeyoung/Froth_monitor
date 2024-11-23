@@ -1,7 +1,7 @@
 """The entry point for the Bubble Analyser program."""
 
 
-from .GUI import MainGUI
+from .gui import MainGUI
 from PySide6.QtWidgets import (QApplication, QMainWindow, QPushButton, QLabel, QFileDialog, 
                                 QMenuBar, QMenu, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, 
                                 QComboBox, QMessageBox, QDialog, QLineEdit)

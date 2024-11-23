@@ -1,12 +1,12 @@
 import cv2
 import numpy as np
 import random
+from datetime import datetime
 
 class VideoAnalysisModule:
     def __init__(self, arrow_dir_x, arrow_dir_y):
         self.previous_frame = None  # Store the previous frame for motion analysis
-        self.velocity_history = np.array([])  # Store delta pixel values between frames
-        self.delta_history = np.array([])
+        self.velocity_history = []  # Store delta pixel values between frames
         self.color = self.generate_random_color()
         self.current_velocity = 0
         self.arrow_dir_x = arrow_dir_x
@@ -35,7 +35,11 @@ class VideoAnalysisModule:
         avg_flow_y = np.mean(flow_y)
         
         # Store the delta pixel values between the current and previous frame
-        self.velocity_history = np.append(self.velocity_history, self.get_current_velocity(avg_flow_x, avg_flow_y))
+        
+        self.velocity_history.append({
+            "velocity": self.get_current_velocity(avg_flow_x, avg_flow_y),
+            "timestamp": self.get_current_time(),
+        })
         
         # Update the previous frame to the current frame for the next analysis
         self.previous_frame = current_frame 
@@ -49,6 +53,9 @@ class VideoAnalysisModule:
         self.current_velocity: float = avg_flow_x * self.arrow_dir_x + avg_flow_y * self.arrow_dir_y
         return self.current_velocity
     
+    def get_current_time(self):
+        return datetime.now().strftime("%d/%m/%Y %H:%M:%S.%f")[:-3]
+        
     def get_frame_count(self):
         return len(self.velocity_history)
         
