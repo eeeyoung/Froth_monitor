@@ -1,15 +1,17 @@
 # Froth monitor
 ---
-Froth Tracker is an interactive GUI application for analyzing froth videos in real-time or offline. It allows users to draw Regions of Interest (ROIs), track froth movement using optical flow algorithm (more algorithms in the future), and export detailed analysis results, including velocity data, timestamps, and average velocity.
+Froth monitor is an interactive GUI application for analyzing froth videos in real-time or offline. It allows users to draw Regions of Interest (ROIs), track froth movement using optical flow algorithm (more algorithms in the future), and export detailed analysis results, including velocity data, timestamps, and average velocity.
 
 ## Features
 - Real-time froth movement tracking via live camera input.
 - Supports video imports in popular formats (e.g., MP4, AVI).
 - Draw, manage, and analyze multiple Regions of Interest (ROIs).
-- Advanced velocity analysis using dense optical flow (Farneback method).
-- Real-time visualization of movement and scrolling axis.
+- Advanced velocity analysis using dense optical flow (Farneback method) (more algorithms in the future).
+- Real-time visualization of movement and scrolling axis for velocities.
 - Data export in CSV and Excel formats, with customizable settings.
-- Integrated video recording with timestamped frame analysis.
+- Automatically save and load application data.
+- Integrated video recording for live camera input.
+
 
 ## Demo
 
@@ -21,6 +23,28 @@ Froth Tracker is an interactive GUI application for analyzing froth videos in re
    ```
    git clone https://github.com/gyyyno1/Froth_monitor.git
 
+2. Navigate to the project directory:
+   ```
+   cd your-repo
+
+3. Install dependencies by poetry
+   ```
+   pip install poetry
+   poetry instsall
+   ```
+   , or to build the environment without using poetry:
+   ```
+   pip intall -r requirements.txt
+   ```
+   
+4. Run the application by poetry
+   ```
+   poetry run python -m i_love_froth
+   ```
+   , or to run it in local environment
+   ```
+   python -m i_love_froth
+   ```
 __________________________________________________________________________________________________________________________________________________________________
 # Update: 21st Nov 2024
 ### Work in Progress
