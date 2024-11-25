@@ -29,7 +29,7 @@ Froth monitor is an interactive GUI application for analyzing froth videos in re
 
 3. Install dependencies by poetry
    ```
-   pip install poetry
+   pipx install poetry
    poetry instsall
    ```
    , or to build the environment without using poetry:
