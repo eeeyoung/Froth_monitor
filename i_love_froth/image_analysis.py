@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 """Video Analysis Module for Froth Tracker Application.
 
 This module defines the `VideoAnalysisModule` class, which provides methods
@@ -28,16 +26,11 @@ call the `analyze` method on each video frame. Use `get_results` to retrieve
 the velocity history.
 """
 
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
 import cv2
 import numpy as np
 import random
 from datetime import datetime
 
-<<<<<<< HEAD
-class VideoAnalysisModule:
-    def __init__(self, arrow_dir_x, arrow_dir_y):
-=======
 class VideoAnalysis:
     """
     Video Analysis Class for Motion Detection and Analysis.
@@ -94,7 +87,6 @@ class VideoAnalysis:
             The y direction for the scrolling axis (positive is down, negative is up).
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.previous_frame = None  # Store the previous frame for motion analysis
         self.velocity_history = []  # Store delta pixel values between frames
         self.color = self.generate_random_color()
@@ -102,9 +94,6 @@ class VideoAnalysis:
         self.arrow_dir_x = arrow_dir_x
         self.arrow_dir_y = arrow_dir_y
         
-<<<<<<< HEAD
-    def analyze(self, current_frame):
-=======
     def analyze(self, 
                 current_frame: np.ndarray) -> tuple[float, float]:
         """
@@ -120,7 +109,6 @@ class VideoAnalysis:
         tuple[float, float]
             The delta pixel values in x and y directions between the current and previous frames.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         # Analyze the given frame for changes in x and y directions
         if self.previous_frame is None:
@@ -155,28 +143,6 @@ class VideoAnalysis:
         # Return delta pixel values for the current frame
         return avg_flow_x, avg_flow_y
 
-<<<<<<< HEAD
-    def get_current_velocity(self, avg_flow_x, avg_flow_y):
-        
-
-        self.current_velocity: float = avg_flow_x * self.arrow_dir_x + avg_flow_y * self.arrow_dir_y
-        return self.current_velocity
-    
-    def get_current_time(self):
-        return datetime.now().strftime("%d/%m/%Y %H:%M:%S.%f")[:-3]
-        
-    def get_frame_count(self):
-        return len(self.velocity_history)
-        
-    def get_results(self):
-        # Return all stored delta pixel results
-        return self.velocity_history
-
-    def generate_random_color(self):
-        """
-        Generate a random color in RGB format.
-        """
-=======
     def get_current_velocity(self, 
                              avg_flow_x: float, 
                              avg_flow_y: float) -> float:
@@ -239,7 +205,6 @@ class VideoAnalysis:
         Generate a random color in RGB format.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         r = random.randint(0, 255)
         g = random.randint(0, 255)
         b = random.randint(0, 255)
@@ -247,11 +212,7 @@ class VideoAnalysis:
     
 if __name__ == "__main__":
     # Example usage of VideoAnalysisModule
-<<<<<<< HEAD
-    video_analysis = VideoAnalysisModule()
-=======
     video_analysis = VideoAnalysis()
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
 
     # Capture video from file path
     video_path = "data/input_videos/test.avi"  # Replace with the actual path to your video file

@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-from PySide6.QtWidgets import (QApplication, QMainWindow, QPushButton, QLabel, QFileDialog, 
-                                QMenuBar, QMenu, QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, 
-                                QComboBox, QMessageBox, QDialog, QLineEdit)
-from PySide6.QtGui import QIcon, QPixmap, QPainter, QPen, QImage
-=======
 """Froth Tracker Application.
 
 This Python-based GUI application is designed to analyze froth images and videos for research and industrial purposes. 
@@ -88,23 +82,13 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QPushButton, QLabel, Q
                                 QMenuBar, QMenu, QWidget, QVBoxLayout, QGridLayout, 
                                 QComboBox, QMessageBox, QDialog, QLineEdit)
 from PySide6.QtGui import QPixmap, QPainter, QPen, QImage, QCloseEvent, QMouseEvent
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
 from PySide6.QtCore import Qt, QTimer, QRect, QPoint
 import pyqtgraph as pg
 import sys
 import cv2
-<<<<<<< HEAD
-import csv
-import json
-import os
-import numpy as np
-from datetime import datetime
-from openpyxl import Workbook
-=======
 import time
 import numpy as np
 from datetime import datetime
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
 from .arrow import Arrow
 from .autosaver import AutoSaver
 from .video_recorder import VideoRecorder
@@ -112,16 +96,6 @@ from .roi import ROI
 from .export import Export
         
 class MainGUI(QMainWindow):
-<<<<<<< HEAD
-    def __init__(self):
-        """
-        Initializes the main GUI window with essential attributes and UI elements.
-
-        :param self: The main GUI window instance
-        :type self: MainGUI
-        :return: None
-        :rtype: None
-=======
     """
     The main graphical user interface (GUI) class for the Froth Tracker application.
 
@@ -251,22 +225,12 @@ class MainGUI(QMainWindow):
         Initializes the main window and the video/ROI-related attributes.
         Also initializes the arrow drawing, export setting, video recording, and auto save attributes.
         Finally, defines the UI elements by calling the initUI method.
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         super(MainGUI, self).__init__()
         self.setWindowTitle('I love Froths')
         self.setGeometry(100, 100, 1200, 600)
         
         # Video-related attributes
-<<<<<<< HEAD
-        self.video_capture = None
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.display_frame)
-        self.playing = False
-        
-        # ROI and Video Analysis
-        self.rois = []  # List of ROI instances
-=======
         self.video_capture: cv2.VideoCapture = None
         self.timer: QTimer = QTimer(self)
         self.timer.timeout.connect(self.display_frame)
@@ -274,29 +238,12 @@ class MainGUI(QMainWindow):
         
         # ROI and Video Analysis
         self.rois: list = []  # List of ROI instances
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.current_roi_start = None  # Starting point of the currently drawn ROI
         self.current_roi_rect = None  # QRect of the ROI being drawn
         self.drawing_roi = False  # Flag for ROI drawing
         self.current_pixmap = None  # Store the current video frame as QPixmap for real-time updates
         
         # Arrow drawing
-<<<<<<< HEAD
-        self.arrow_angle = np.pi / 2
-        self.arrow_locked = False # Lock status for arrow direction
-        self.drawing_arrow = False  # Flag to indicate if arrow is being drawn
-        self.overflow_direction_label = None  # Label to display the overflow direction angle
-        
-        # Export setting
-        self.export = Export(self)
-        
-        # Video recording
-        self.recording = False
-        self.video_writer = None
-        
-        # Auto Save
-        self.auto_saver = AutoSaver()
-=======
         self.arrow_angle: float = np.pi / 2
         self.arrow_locked: bool = False # Lock status for arrow direction
         self.drawing_arrow: bool = False  # Flag to indicate if arrow is being drawn
@@ -313,16 +260,12 @@ class MainGUI(QMainWindow):
         
         # Auto Save
         self.auto_saver: AutoSaver = AutoSaver()
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.auto_saver.load_from_file
         
         
         # Define UI elements
         self.initUI()
 
-<<<<<<< HEAD
-    def initUI(self):
-=======
     def initUI(self) -> None:
         """
         Initialize the UI elements of the main window.
@@ -332,7 +275,6 @@ class MainGUI(QMainWindow):
         for the video canvas, arrow canvas, ROI movements canvas, and the 
         overflow direction label and text box.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         # Main widget and layout
         main_widget = QWidget(self)
@@ -347,19 +289,10 @@ class MainGUI(QMainWindow):
         grid_layout = QGridLayout()
         main_layout.addLayout(grid_layout)
 
-<<<<<<< HEAD
-        # Buttons
-        # self.add_buttons(grid_layout)
-
-        # Video canvas placeholder
-        self.add_canvas_placeholder(grid_layout)
-
-=======
         # Video canvas placeholder
         self.add_canvas_placeholder(grid_layout)
 
         # Arrow canvas
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.add_arrow_canvas(grid_layout)
         
         # Overflow direction label
@@ -368,11 +301,6 @@ class MainGUI(QMainWindow):
         # ROI Movements Canvas
         self.add_ROI_movement_placeholder(grid_layout)
         
-<<<<<<< HEAD
-
-        
-=======
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         # Overflow direction value label
         self.direction_textbox = QLineEdit(self)
         self.direction_textbox.setText(f"{np.degrees(self.arrow_angle):.2f}")  # Default to 90 degrees
@@ -382,9 +310,6 @@ class MainGUI(QMainWindow):
         
         self.add_buttons(grid_layout)
 
-<<<<<<< HEAD
-    def createMenuBar(self):
-=======
     def createMenuBar(self) -> None:
         """
         Create the menu bar for the main window.
@@ -394,7 +319,6 @@ class MainGUI(QMainWindow):
         The "Export" menu contains one action: "Export Settings".
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         menu_bar = QMenuBar(self)
         self.setMenuBar(menu_bar)
         
@@ -409,9 +333,6 @@ class MainGUI(QMainWindow):
         menu_bar.addMenu(export_menu)
         export_menu.addAction("Export Settings", self.export.export_setting_window)
 
-<<<<<<< HEAD
-    def add_buttons(self, layout):
-=======
     def add_buttons(self, layout: QGridLayout) -> None:
         """
         Adds buttons to the layout for adding a ROI, pausing/resuming the video,
@@ -419,7 +340,6 @@ class MainGUI(QMainWindow):
         and starting video recording.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.add_roi_button = QPushButton("Add One ROI", self)
         self.add_roi_button.clicked.connect(self.start_drawing_roi)
         layout.addWidget(self.add_roi_button, 3, 0, 1, 2)
@@ -444,21 +364,12 @@ class MainGUI(QMainWindow):
         self.start_record_button.clicked.connect(self.start_recording)
         layout.addWidget(self.start_record_button, 7, 0, 1, 2)
 
-<<<<<<< HEAD
-        # self.stop_record_button = QPushButton("Stop Recording", self)
-        # self.stop_record_button.clicked.connect(self.stop_recording)
-        # layout.addWidget(self.stop_record_button, 9, 0, 1, 2)
-
-    def add_canvas_placeholder(self, layout):
-        
-=======
     def add_canvas_placeholder(self, layout: QGridLayout) -> None:
         """
         Adds a placeholder QLabel to the layout where the video canvas will be drawn.
         The size of the label is fixed to 700x400.
         Also sets up mouse events for ROI drawing.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.video_canvas_label = QLabel("Video Canvas", self)
         self.video_canvas_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.video_canvas_label.setStyleSheet("background-color: none;")
@@ -470,9 +381,6 @@ class MainGUI(QMainWindow):
         self.video_canvas_label.mouseMoveEvent = self.mouse_move_event
         self.video_canvas_label.mouseReleaseEvent = self.mouse_release_event
     
-<<<<<<< HEAD
-    def add_arrow_canvas(self, layout):
-=======
     def add_arrow_canvas(self, layout: QGridLayout) -> None:
         """
         Adds a placeholder QLabel to the layout where the arrow direction
@@ -481,7 +389,6 @@ class MainGUI(QMainWindow):
         drawing the arrow.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.arrow_canvas_label = QLabel("Arrow Display", self)
         self.arrow_canvas_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.arrow_canvas_label.setStyleSheet("background-color: lightgray;")
@@ -490,9 +397,6 @@ class MainGUI(QMainWindow):
         
         self.arrow = Arrow(self.arrow_canvas_label)  # Current arrow instance
     
-<<<<<<< HEAD
-    def add_ROI_movement_placeholder(self, layout):
-=======
     def add_ROI_movement_placeholder(self, layout: QGridLayout) -> None:
         """
         Adds a placeholder for the ROI movement curves to the layout.
@@ -503,7 +407,6 @@ class MainGUI(QMainWindow):
         Also initializes the data structures to hold the movement curves and
         buffers for each ROI.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         self.plot_widget = pg.PlotWidget()
         self.plot_widget.setBackground("w")
@@ -518,25 +421,15 @@ class MainGUI(QMainWindow):
         self.movement_buffers = {}  # Store buffers for each ROI
         self.max_frames = 150  # Maximum number of frames to display
         
-<<<<<<< HEAD
-    def add_overflow_direction_label(self, layout):
-        
-=======
     def add_overflow_direction_label(self, layout) -> None:
         """
         Adds a QPushButton to the layout which triggers the start_drawing_arrow method when clicked.
         The button is labeled "Add Overflow Arrow".
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.add_arrow_button = QPushButton("Add Overflow Arrow")
         self.add_arrow_button.clicked.connect(self.start_drawing_arrow)
         layout.addWidget(self.add_arrow_button, 1, 0, 1, 1)
 
-<<<<<<< HEAD
-    def message_boxes(self, event):
-        if event == "Confirm Direction":
-
-=======
     def message_boxes(self, event: str) -> None:
         """
         Handles different message box events related to the arrow direction.
@@ -549,7 +442,6 @@ class MainGUI(QMainWindow):
         """
         
         if event == "Confirm Direction":
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             reply = QMessageBox.question(
                     self,
                     "Confirm Overflow Direction",
@@ -557,15 +449,10 @@ class MainGUI(QMainWindow):
                     "Would you like to lock this direction?",
                     QMessageBox.Yes | QMessageBox.No,
                 )
-<<<<<<< HEAD
-            if reply == QMessageBox.Yes:
-                self.lock_arrow_direction()
-=======
             
             if reply == QMessageBox.Yes:
                 self.lock_arrow_direction()
                 
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             else:
                 QMessageBox.warning(self, "Direction Not Confirmed", "Please confirm the arrow direction first.")
                 return    
@@ -574,11 +461,6 @@ class MainGUI(QMainWindow):
             QMessageBox.warning(self, "Warning", "Overflow Direction already locked")
             return    
         
-<<<<<<< HEAD
-    def start_drawing_arrow(self):
-        if self.arrow_locked:
-
-=======
     def start_drawing_arrow(self) -> None:
         """
         Initiate the drawing of an overflow direction arrow.
@@ -589,18 +471,12 @@ class MainGUI(QMainWindow):
         """
             
         if self.arrow_locked:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             return
         
         self.drawing_arrow = True
         self.direction_textbox.setText("Drawing Overflow Direction...")
         return
     
-<<<<<<< HEAD
-    def import_local_video(self):
-        
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open Video File", "", "Video Files (*.mp4 *.avi *.mkv)")
-=======
     def import_local_video(self) -> None:
         """
         Opens a file dialog to select a local video file and initializes video capture.
@@ -614,7 +490,6 @@ class MainGUI(QMainWindow):
         
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Video File", "", "Video Files (*.mp4 *.avi *.mkv)")
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if file_path:
             self.video_capture = cv2.VideoCapture(file_path)
             if not self.video_capture.isOpened():
@@ -623,12 +498,6 @@ class MainGUI(QMainWindow):
                 self.playing = True
                 self.timer.start(30)
 
-<<<<<<< HEAD
-    def load_camera_dialog(self):
-        """
-        Opens a dialog to select and load an available camera.
-        """
-=======
     def load_camera_dialog(self) -> None:
         """
         Opens a dialog to select and load an available camera.
@@ -643,7 +512,6 @@ class MainGUI(QMainWindow):
         the selected camera index.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         available_cameras = []
         for index in range(10):  # Check up to 10 camera indices
             cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
@@ -670,26 +538,6 @@ class MainGUI(QMainWindow):
         confirm_button = QPushButton("Load Camera", dialog)
         confirm_button.clicked.connect(lambda: self.load_selected_camera(camera_combo, dialog))
         layout.addWidget(confirm_button)
-<<<<<<< HEAD
-
-        dialog.exec()
-
-    def load_selected_camera(self, camera_combo, dialog):
-        """
-        Loads the selected camera based on user input.
-        """
-        selected_camera_index = int(camera_combo.currentText().split()[-1])
-        self.video_capture = cv2.VideoCapture(selected_camera_index, cv2.CAP_DSHOW)
-        if not self.video_capture.isOpened():
-            QMessageBox.critical(self, "Error", f"Could not open Camera {selected_camera_index}!")
-        else:
-            QMessageBox.information(self, "Camera Loaded", f"Camera {selected_camera_index} is now active.")
-            self.playing = True
-            self.timer.start(30)
-            dialog.accept()
-            
-    def pause_play(self):
-=======
         
         # Show the dialog
         dialog.exec()
@@ -739,25 +587,18 @@ class MainGUI(QMainWindow):
         Returns:
             None
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         if self.video_capture is None or not self.video_capture.isOpened():
             QMessageBox.warning(self, "No Video/Camera", "Please load a video or camera first!")
             return
 
         self.playing = not self.playing
-<<<<<<< HEAD
-=======
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.playing:
             self.timer.start(30)
         else:
             self.timer.stop()
 
-<<<<<<< HEAD
-    def display_frame(self):
-=======
     def display_frame(self) -> None:
         """
         Read a frame from the video capture and update the GUI.
@@ -774,7 +615,6 @@ class MainGUI(QMainWindow):
         Returns:
             None
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         if self.video_capture is not None and self.video_capture.isOpened():
             ret, frame = self.video_capture.read()
@@ -796,11 +636,6 @@ class MainGUI(QMainWindow):
                 # Perform analysis and update cross position
                 avg_flow_x, avg_flow_y = roi.analysis_module.analyze(roi_frame)
                 
-<<<<<<< HEAD
-                
-                
-=======
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
                 if avg_flow_x is not None and avg_flow_y is not None:
                     self.auto_save(roi, i)
                     roi.update_cross_position(avg_flow_x, avg_flow_y)
@@ -813,13 +648,6 @@ class MainGUI(QMainWindow):
             height, width, channel = frame.shape
             q_img = QImage(frame.data, width, height, channel * width, QImage.Format_RGB888)
             self.current_pixmap = QPixmap.fromImage(q_img)
-<<<<<<< HEAD
-            # self.video_canvas_label.setPixmap(self.current_pixmap)
-
-            self.video_canvas_label.setPixmap(self.current_pixmap)
-          
-    def start_drawing_roi(self):
-=======
 
             self.video_canvas_label.setPixmap(self.current_pixmap)
           
@@ -835,15 +663,11 @@ class MainGUI(QMainWindow):
         Returns:
             None
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if not self.arrow_locked:
             self.message_boxes("Confirm Direction")
 
         self.drawing_roi = True
 
-<<<<<<< HEAD
-    def mouse_press_event(self, event):
-=======
     def mouse_press_event(self, event: QMouseEvent) -> None:
         """
         Handles the mouse press event.
@@ -861,7 +685,6 @@ class MainGUI(QMainWindow):
             event (QEvent): The QMouseEvent object.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.drawing_roi:
             # Adjust the start position based on scaling and offsets
             self.current_roi_start = self.adjust_mouse_position(event.pos())
@@ -869,9 +692,6 @@ class MainGUI(QMainWindow):
         if self.drawing_arrow:
             self.arrow.start = self.adjust_mouse_position(event.pos())
         
-<<<<<<< HEAD
-    def mouse_move_event(self, event):
-=======
     def mouse_move_event(self, event: QMouseEvent) -> None:
         """
         Handles the mouse move event.
@@ -889,7 +709,6 @@ class MainGUI(QMainWindow):
             event (QEvent): The QMouseEvent object.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.drawing_roi and self.current_roi_start:
             # Adjust the current position while dragging
             end = self.adjust_mouse_position(event.pos())
@@ -901,10 +720,6 @@ class MainGUI(QMainWindow):
             self.arrow.end = self.adjust_mouse_position(event.pos())
             self.update_video_with_arrow()
             
-<<<<<<< HEAD
-    def mouse_release_event(self, event):
-        
-=======
     def mouse_release_event(self, event: QMouseEvent) -> None:
         """
         Handles the mouse release event.
@@ -920,7 +735,6 @@ class MainGUI(QMainWindow):
         Parameters:
             event (QEvent): The QMouseEvent object.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.drawing_roi:
             # Adjust the end position
             end = self.adjust_mouse_position(event.pos())
@@ -952,12 +766,6 @@ class MainGUI(QMainWindow):
             print("Arrow Dir X:", self.arrow.arrow_dir_x)
             print("Arrow Dir Y:", self.arrow.arrow_dir_y)
 
-<<<<<<< HEAD
-    def adjust_mouse_position(self, pos):
-        """
-        Adjust the mouse position relative to the displayed video frame.
-        """
-=======
     def adjust_mouse_position(self, pos: QPoint) -> QPoint:
         """
         Adjusts the given mouse position relative to the displayed video frame.
@@ -974,7 +782,6 @@ class MainGUI(QMainWindow):
             QPoint: The adjusted mouse position considering any scaling offsets.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if not self.current_pixmap:
             return pos
 
@@ -993,9 +800,6 @@ class MainGUI(QMainWindow):
 
         return QPoint(adjusted_x, adjusted_y)
     
-<<<<<<< HEAD
-    def update_overflow_direction_textbox(self):
-=======
     def update_overflow_direction_textbox(self) -> None:
         """
         Updates the overflow direction textbox based on the current arrow direction.
@@ -1003,7 +807,6 @@ class MainGUI(QMainWindow):
         If the arrow direction is locked, a message box is shown. Otherwise, the
         textbox is updated with the current angle in degrees.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.arrow_locked:
             self.message_boxes("Arrow Locked")
             return
@@ -1012,9 +815,6 @@ class MainGUI(QMainWindow):
             self.arrow_angle = self.arrow.angle
             self.direction_textbox.setText(f"{np.degrees(self.arrow_angle):.2f}")
             
-<<<<<<< HEAD
-    def update_video_with_roi(self):
-=======
     def update_video_with_roi(self) -> None:
         """
         Overlay the currently drawn Region Of Interest (ROI) on the video frame.
@@ -1028,7 +828,6 @@ class MainGUI(QMainWindow):
             - self.current_roi_rect is a valid QRect representing the ROI being drawn.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         # Overlay the drawing ROI on the current video frame
         if self.current_pixmap and self.current_roi_rect:
             temp_pixmap = self.current_pixmap.copy()
@@ -1039,12 +838,6 @@ class MainGUI(QMainWindow):
             painter.end()
             self.video_canvas_label.setPixmap(temp_pixmap)
 
-<<<<<<< HEAD
-    def update_video_with_arrow(self):
-        """
-        Overlay the arrow on the video canvas.
-        """
-=======
     def update_video_with_arrow(self) -> None:
         """
         Overlays the currently drawn arrow on the video frame.
@@ -1058,45 +851,25 @@ class MainGUI(QMainWindow):
             - self.arrow is a valid Arrow instance representing the drawn arrow.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.current_pixmap and self.arrow and self.arrow.start and self.arrow.end:
             temp_pixmap = self.current_pixmap.copy()
             painter = QPainter(temp_pixmap)
             pen = QPen(Qt.red, 2, Qt.SolidLine)
             painter.setPen(pen)
-<<<<<<< HEAD
-            # Draw the arrow line
-            painter.drawLine(self.arrow.start, self.arrow.end)
-=======
             
             # Draw the arrow line
             painter.drawLine(self.arrow.start, self.arrow.end)
             
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             # Draw arrowhead
             dx = self.arrow.end.x() - self.arrow.start.x()
             dy = self.arrow.end.y() - self.arrow.start.y()
             angle = np.arctan2(-dy, dx)
             length = 10  # Length of arrowhead lines
-<<<<<<< HEAD
-=======
             
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             x1 = self.arrow.end.x() - length * np.cos(angle - np.pi / 6)
             y1 = self.arrow.end.y() + length * np.sin(angle - np.pi / 6)
             x2 = self.arrow.end.x() - length * np.cos(angle + np.pi / 6)
             y2 = self.arrow.end.y() + length * np.sin(angle + np.pi / 6)
-<<<<<<< HEAD
-            painter.drawLine(self.arrow.end, QPoint(int(x1), int(y1)))
-            painter.drawLine(self.arrow.end, QPoint(int(x2), int(y2)))
-            painter.end()
-            self.video_canvas_label.setPixmap(temp_pixmap)
-
-    def manual_arrow_angle_update(self):
-        """
-        Update the arrow direction based on the value entered in the textbox.
-        """
-=======
             
             painter.drawLine(self.arrow.end, QPoint(int(x1), int(y1)))
             painter.drawLine(self.arrow.end, QPoint(int(x2), int(y2)))
@@ -1113,17 +886,10 @@ class MainGUI(QMainWindow):
         If the input is invalid (e.g. not a number), shows a warning message.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         try:
             # Parse the user input and update the arrow angle
             self.arrow_angle = np.radians(float(self.direction_textbox.text()))
             QMessageBox.information(self, "Direction Updated", f"Overflow direction set to {np.degrees(self.arrow_angle):.2f}°.")
-<<<<<<< HEAD
-        except ValueError:
-            QMessageBox.warning(self, "Invalid Input", "Please enter a valid numeric value for the overflow direction.")
-
-    def asking_lock_arrow_direction(self):
-=======
         
         except ValueError:
             QMessageBox.warning(self, "Invalid Input", "Please enter a valid numeric value for the overflow direction.")
@@ -1137,19 +903,12 @@ class MainGUI(QMainWindow):
         the direction, shows a message box saying that the direction is already locked.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.arrow_locked:
             self.message_boxes("Arrow Locked")
             return
             
         self.message_boxes("Confirm Direction")
          
-<<<<<<< HEAD
-    def lock_arrow_direction(self):
-        """
-        Lock the arrow direction, preventing further modifications.
-        """
-=======
     def lock_arrow_direction(self) -> None:
         """
         Locks the overflow direction.
@@ -1160,7 +919,6 @@ class MainGUI(QMainWindow):
         reflect the new direction. The overflow direction is also saved to the auto-save file.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         try:
             # Parse angle from the textbox
             self.arrow_angle = np.radians(float(self.direction_textbox.text()))
@@ -1170,21 +928,6 @@ class MainGUI(QMainWindow):
             self.arrow.update_arrow_canvas()
             self.auto_saver.update_arrow_direction(self.arrow_angle)
             QMessageBox.information(self, "Direction Locked", f"Overflow direction locked at {np.degrees(self.arrow_angle):.2f}°.")
-<<<<<<< HEAD
-        except ValueError:
-            QMessageBox.warning(self, "Invalid Input", "Please enter a valid numeric value for the overflow direction.")
-
-    def start_recording(self):
-        if not self.video_capture or not self.video_capture.isOpened():
-            QMessageBox.warning(self, "Warning", "No active video feed to record.")
-            return
-
-        # Configure the video writer
-        # file_name = QFileDialog.getSaveFileName(self, "Save Video", "", "Video Files (*.mp4 *.avi)")[0]
-        # if not file_name:
-        #     return  # User canceled
-        
-=======
         
         except ValueError:
             QMessageBox.warning(self, "Invalid Input", "Please enter a valid numeric value for the overflow direction.")
@@ -1247,37 +990,25 @@ class MainGUI(QMainWindow):
         if self.fps_recording == 0:
             self.fps_calculation()
                 
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.export.video_directory and self.export.record_video:
             
             file_path = self.export.video_directory
             file_name = self.export.video_filename
             
-<<<<<<< HEAD
-            self.video_writer = VideoRecorder(file_path, file_name, frame_size = self.frame_size)
-=======
             print("FPS of the video:", self.fps_recording)
             self.video_writer = VideoRecorder(file_path, file_name, frame_size = self.frame_size, fps = self.fps_recording)
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             self.video_writer.start_recording()
             self.recording = True
             
             self.start_record_button.setText("Stop Recording")
             self.start_record_button.setStyleSheet("background-color: red; color: white;")
-<<<<<<< HEAD
-            self.start_record_button.clicked.disconnect(self.start_recording)
-=======
             # self.start_record_button.clicked.disconnect(self.start_recording)
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             self.start_record_button.clicked.connect(self.stop_recording)
         
         else:
             QMessageBox.warning(self, "Warning", "Recording is disabled.\nPlease enable it in the export settings.")
             return
         
-<<<<<<< HEAD
-    def stop_recording(self):
-=======
     def stop_recording(self) -> None:
         """
         Stops the video recording and saves the recorded video.
@@ -1294,7 +1025,6 @@ class MainGUI(QMainWindow):
             None
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.recording and self.video_writer:
             self.video_writer.stop_recording()
             # self.video_writer.release()
@@ -1308,9 +1038,6 @@ class MainGUI(QMainWindow):
             
             QMessageBox.information(self, "Recording Stopped", "Video recording has been saved")
     
-<<<<<<< HEAD
-    def auto_save(self, roi, roi_index):
-=======
     def auto_save(self, 
                   roi: ROI, 
                   roi_index: int) -> None:
@@ -1331,16 +1058,12 @@ class MainGUI(QMainWindow):
         Returns:
             None
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         velocity = roi.analysis_module.velocity_history[-1]["velocity"]
         timestamp = roi.analysis_module.velocity_history[-1]["timestamp"]
         frame_index = roi.analysis_module.get_frame_count()
         
         self.auto_saver.add_frame_data(roi_index, frame_index, velocity, timestamp)
     
-<<<<<<< HEAD
-    def close_event(self, event):
-=======
     def close_event(self, 
                     event: QCloseEvent) -> None:
         
@@ -1357,16 +1080,11 @@ class MainGUI(QMainWindow):
         Returns:
             None
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         if self.video_writer:
             self.video_writer.release()
         super().closeEvent(event)
       
-<<<<<<< HEAD
-    def save(self):
-        try:
-=======
     def save(self) -> None:
         """
         Saves the current state of the application by exporting analysis results and stopping video playback.
@@ -1386,17 +1104,12 @@ class MainGUI(QMainWindow):
         
         try:
             
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             # Step 1: Save analysis results
             if not self.export.export_directory or not self.export.export_filename:
                 QMessageBox.warning(self, "Export Error", "Please configure export settings before saving.")
                 return
-<<<<<<< HEAD
-
-=======
             
             # Step 2: Export analysis results
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             self.export_data()
 
             # Step 3: Stop video playback
@@ -1412,23 +1125,6 @@ class MainGUI(QMainWindow):
                 f"- Results exported to: {self.export.export_directory}\n",
             )
 
-<<<<<<< HEAD
-            # Step 4: Reset the application state
-            self.reset_application()
-
-        except Exception as e:
-            QMessageBox.critical(self, "Save Failed", f"An error occurred while saving data: {e}")
-
-    def export_data(self):
-        """
-        Handles exporting data for the program.
-        """
-        self.export.excel_resutls(self.rois, self.arrow_angle)
-
-    def reset_application(self):
-        """
-        Resets the application state.
-=======
         except Exception as e:
             QMessageBox.critical(self, "Save Failed", f"An error occurred while saving data: {e}")
 
@@ -1455,7 +1151,6 @@ class MainGUI(QMainWindow):
 
         Returns:
             None
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         self.rois = []
         self.movement_buffers = {}
@@ -1463,12 +1158,9 @@ class MainGUI(QMainWindow):
         self.plot_widget.clear()
         self.video_canvas_label.clear()
         
-<<<<<<< HEAD
-=======
         self.playing = False
         self.realtime_input = False
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.arrow.reset()
         self.arrow_locked = False
         self.arrow_canvas_label.clear()

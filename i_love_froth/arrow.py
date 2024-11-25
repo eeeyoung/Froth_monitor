@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 """Arrow Module for Froth Tracker Application.
 
 This module defines the `Arrow` class, which is responsible for managing the overflow direction
@@ -24,19 +22,12 @@ Imports:
     For mathematical operations such as trigonometric calculations.
 """
 
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
 from PySide6.QtWidgets import QLabel
 from PySide6.QtGui import QPixmap, QPainter, QPen
 from PySide6.QtCore import Qt, QPoint
 import numpy as np
 
 class Arrow:
-<<<<<<< HEAD
-    def __init__(self, 
-                 canvas_label: QLabel,
-                 start: QPoint = None, 
-                 end: QPoint = None):
-=======
     """
     Arrow Class for Managing Overflow Direction in the Froth Tracker Application.
 
@@ -79,7 +70,6 @@ class Arrow:
                  canvas_label: QLabel,
                  start: QPoint = None, 
                  end: QPoint = None) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Initialize the Arrow object with a starting and ending point.
         The angle of the arrow will be calculated from the starting and ending points.
@@ -92,11 +82,7 @@ class Arrow:
         self.arrow_dir_x = 0.0
         self.arrow_dir_y = 0.0
         
-<<<<<<< HEAD
-    def calculate_angle(self):
-=======
     def calculate_angle(self) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Calculate the angle of the arrow in radians relative to the horizontal.
         """
@@ -105,13 +91,6 @@ class Arrow:
             dy = self.end.y() - self.start.y()
             self.angle = np.arctan2(dy, dx)
 
-<<<<<<< HEAD
-    def calculate_components_angles(self):
-        self.arrow_dir_x = np.cos(self.angle)
-        self.arrow_dir_y = np.sin(self.angle)
-    
-    def update_arrow_canvas(self):
-=======
     def calculate_components_angles(self) -> None:
         """
         Calculate the x and y components of the arrow direction given the angle.
@@ -131,7 +110,6 @@ class Arrow:
         The arrow is drawn with a black pen with a width of 2 pixels.
         The updated pixmap is set to the canvas_label.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         # Prepare the painter
         pixmap = self.canvas_label.pixmap() or QPixmap(self.canvas_label.size())
@@ -165,29 +143,18 @@ class Arrow:
 
         painter.drawLine(QPoint(int(end_x), int(end_y)), QPoint(int(left_x), int(left_y)))
         painter.drawLine(QPoint(int(end_x), int(end_y)), QPoint(int(right_x), int(right_y)))
-<<<<<<< HEAD
-
-=======
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         painter.end()
 
         # Set updated pixmap
         self.canvas_label.setPixmap(pixmap)
 
-<<<<<<< HEAD
-    def set_displaying_preset(self, video_canvas_label):
-=======
     def set_displaying_preset(self, 
                               video_canvas_label: QLabel) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             """
             Sets up the arrow's start and end points based on the current angle for the video canvas.
             :param video_canvas_label: The QLabel representing the video canvas.
             """
-<<<<<<< HEAD
-=======
             
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             self.calculate_components_angles()
 
             # Define the arrow start and end points
@@ -206,9 +173,6 @@ class Arrow:
             self.arrow_start = QPoint(start_x, start_y)
             self.arrow_end = QPoint(end_x, end_y)
     
-<<<<<<< HEAD
-    def reset(self):
-=======
     def reset(self) -> None:
         """
         Resets the arrow's angle and direction components to their initial state.
@@ -218,7 +182,6 @@ class Arrow:
         calculations.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.angle = 0.0    # Angle of the arrow (in radians)
         self.arrow_dir_x = 0.0
         self.arrow_dir_y = 0.0

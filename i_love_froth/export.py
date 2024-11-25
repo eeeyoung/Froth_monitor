@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 """Export Module for Froth Tracker Application.
 
 This module defines the `Export` class, which provides functionality for
@@ -29,7 +27,6 @@ Imports:
     For creating and saving Excel files.
 """
 
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
 from PySide6.QtWidgets import (QPushButton, QLabel, QFileDialog, 
                                QVBoxLayout, QMessageBox, QDialog, QLineEdit, QCheckBox,
                                QHBoxLayout, QFileDialog, QRadioButton, QFrame)
@@ -41,9 +38,6 @@ from openpyxl import Workbook
 
 
 class Export:
-<<<<<<< HEAD
-    def __init__(self, parent=None):
-=======
     """
     Export Class for Managing Data and Video Export Settings.
 
@@ -119,7 +113,6 @@ class Export:
             font_big (QFont): Font used for larger text elements.
             font_small (QFont): Font used for smaller text elements.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.parent = parent
         self.export_directory = ""
         self.video_directory = ""
@@ -133,17 +126,6 @@ class Export:
         self.font_big = QFont("Arial", 13)
         self.font_small = QFont("Arial", 12)
        
-<<<<<<< HEAD
-
-    def export_setting_window(self):
-        """
-        Opens a dialog for configuring export settings.
-        """
-        dialog = QDialog(self.parent)
-        dialog.setWindowTitle("Export Settings")
-        dialog.setMinimumWidth(400)
-
-=======
     def export_setting_window(self) -> None:
         """
         Opens a dialog window to set export settings.
@@ -155,7 +137,6 @@ class Export:
         dialog = QDialog(self.parent)
         dialog.setWindowTitle("Export Settings")
         dialog.setMinimumWidth(400)
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         layout = QVBoxLayout(dialog)
 
         # Export Directory Selection
@@ -163,10 +144,6 @@ class Export:
         directory_label.setFont(self.font_big)
         layout.addWidget(directory_label)
         
-<<<<<<< HEAD
-
-=======
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         directory_button = QPushButton("Select Data Directory", dialog)
         directory_button.clicked.connect(lambda: self.select_data_directory(dialog))
         layout.addWidget(directory_button)
@@ -199,11 +176,6 @@ class Export:
 
         dialog.exec()
 
-<<<<<<< HEAD
-    def add_video_selection_section(self, layout, dialog):
-        
-        def update_ui():
-=======
     def add_video_selection_section(self, 
                                     layout: QVBoxLayout, 
                                     dialog: QDialog) -> None:
@@ -218,7 +190,6 @@ class Export:
         """
         
         def update_ui() -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             """
             Update the UI based on whether the user selected to save the video in the same directory.
             
@@ -239,11 +210,7 @@ class Export:
                 recording_video_directory_button.setVisible(self.record_video)
                 recording_video_directory_display.setVisible(self.record_video)
 
-<<<<<<< HEAD
-        def on_radio_selection():
-=======
         def on_radio_selection() -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             """
             Handle the event when a radio button is selected.
 
@@ -316,13 +283,6 @@ class Export:
         video_filename_input.setObjectName("video_filename_input")
         layout.addWidget(video_filename_input)
     
-<<<<<<< HEAD
-    def enable_video_recording(self, if_record_video):
-        self.record_video = if_record_video
-        print(self.record_video)
-        
-    def select_video_directory(self, parent_dialog):
-=======
     def enable_video_recording(self, 
                                if_record_video: bool) -> None:
         """
@@ -342,7 +302,6 @@ class Export:
         Args:
             parent_dialog (object): The parent dialog containing the QLabel to be updated.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         directory = QFileDialog.getExistingDirectory(self.parent, "Select Recording Saving Directory")
         
         if directory:
@@ -354,12 +313,8 @@ class Export:
                 print(self.video_directory)
                 directory_display.setText(self.video_directory)
 
-<<<<<<< HEAD
-    def select_data_directory(self, parent_dialog):
-=======
     def select_data_directory(self, 
                               parent_dialog: object) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Opens a file dialog to select the export directory.
         """
@@ -373,13 +328,9 @@ class Export:
             if directory_display:  # Ensure the QLabel is found
                 directory_display.setText(self.export_directory)
 
-<<<<<<< HEAD
-    def save_export_settings(self, dialog, filename_input):
-=======
     def save_export_settings(self, 
                              dialog: QDialog, 
                              filename_input: QLineEdit) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Saves the export settings.
         """
@@ -421,13 +372,9 @@ class Export:
         
         dialog.accept()
         
-<<<<<<< HEAD
-    def excel_resutls(self, rois, arrow_angle):
-=======
     def excel_resutls(self, 
                       rois: list, 
                       arrow_angle: float) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Handles exporting data for the program.
         """
@@ -441,10 +388,6 @@ class Export:
             
             # Prepare the full file path
             file_path_csv = f"{self.export_directory}/{self.export_filename}.csv"
-<<<<<<< HEAD
-            # file_path_json = f"{self.export_directory}/{self.export_filename}.json"
-=======
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
 
             # Step 1: Collect data
             export_data = self.collect_export_data(rois, arrow_angle)
@@ -463,9 +406,6 @@ class Export:
                                  "Export Failed",
                                  f"An error occurred during export: {e}")
 
-<<<<<<< HEAD
-    def collect_export_data(self, rois, arrow_angle):
-=======
     def collect_export_data(self, 
                             rois: list, 
                             arrow_angle: float) -> dict:
@@ -488,7 +428,6 @@ class Export:
             organized list of ROI data with movement data, including frame index,
             velocity, timestamp, and average velocity.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         data = {
             "arrow_direction": np.degrees(arrow_angle),  # Convert to degrees
@@ -525,10 +464,6 @@ class Export:
         print(data)
         return data
     
-<<<<<<< HEAD
-    def get_average_velocity(self, velocity, frame_count, timestamp):
-        
-=======
     def get_average_velocity(self, 
                              velocity: float, 
                              frame_count: int, 
@@ -553,7 +488,6 @@ class Export:
         frame_count : int
             The updated frame count.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if frame_count == 0:
             self.velocity_sum = 0
             
@@ -574,12 +508,6 @@ class Export:
         else:
             return None, frame_count
         
-<<<<<<< HEAD
-    def write_csv(self, file_path, data):
-        """
-        Writes the export data to an Excel file, with each ROI in a separate sheet.
-        """
-=======
     def write_csv(self, 
                   file_path: str, 
                   data: dict) -> None:
@@ -587,7 +515,6 @@ class Export:
         Writes the export data to an Excel file, with each ROI in a separate sheet.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         wb = Workbook()
 
         # Add the arrow direction in the first sheet

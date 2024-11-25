@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import json
-import os
-
-from datetime import datetime
-
-class AutoSaver:
-    def __init__(self, 
-                 file_path = "data/auto_save",
-                 file_name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")):
-=======
 """AutoSaver Module for Froth Tracker Application.
 
 This module defines the `AutoSaver` class, which provides functionality for
@@ -70,7 +59,6 @@ class AutoSaver:
     def __init__(self, 
                  file_path: str = "data/auto_save",
                  file_name: str = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         self.file_path = f"{file_path}/{file_name}.json"
         self.data = {
@@ -78,12 +66,6 @@ class AutoSaver:
             "roi_data": []
         }
     
-<<<<<<< HEAD
-    def update_arrow_direction(self, arrow_angle):
-        self.data["arrow_direction"] = float(arrow_angle)  # Store as float
-    
-    def add_frame_data(self, roi_index, frame_index, velocity, timestamp):
-=======
     def update_arrow_direction(self, 
                                arrow_angle: float) -> None:
         """
@@ -115,7 +97,6 @@ class AutoSaver:
         The data is saved to the autosave file after adding.
         """
         
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         # Ensure the ROI exists
         while len(self.data["roi_data"]) <= roi_index:
             self.data["roi_data"].append({"ROI Index": len(self.data["roi_data"]) + 1, "Movement Data": []})
@@ -132,16 +113,12 @@ class AutoSaver:
         })
         self.save_to_file()  # Save every update
     
-<<<<<<< HEAD
-    def save_to_file(self):
-=======
     def save_to_file(self) -> None:
         """
         Saves the autosave data to the file path specified during initialization.
 
         If a serialization error occurs, a TypeError is raised, and the problematic data is printed.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         try:
             with open(self.file_path, "w") as f:
                 json.dump(self.data, f, indent=4)
@@ -150,9 +127,6 @@ class AutoSaver:
             print(f"Problematic data: {self.data}")
             raise
     
-<<<<<<< HEAD
-    def load_from_file(self):
-=======
     def load_from_file(self) -> dict:
         
         """
@@ -164,13 +138,9 @@ class AutoSaver:
 
         The loaded data is stored in the 'data' attribute of the AutoSaver instance.
         """
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if os.path.exists(self.file_path):
             with open(self.file_path, "r") as f:
                 self.data = json.load(f)
                 return self.data
-<<<<<<< HEAD
-=======
             
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         return None        

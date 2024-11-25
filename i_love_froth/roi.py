@@ -1,21 +1,3 @@
-<<<<<<< HEAD
-from PySide6.QtCore import QRect, QPoint
-import pyqtgraph as pg
-import cv2
-from .image_analysis import VideoAnalysisModule
-
-class ROI:
-    def __init__(self, 
-                 rect: QRect, 
-                 arrow_dir_x: float, 
-                 arrow_dir_y: float):
-        self.rect = rect
-        self.analysis_module = VideoAnalysisModule(arrow_dir_x,
-                                                   arrow_dir_y)
-        self.cross_position = QPoint(rect.center().x(), rect.center().y())  # Initialize cross at ROI center
-
-    def update_cross_position(self, avg_flow_x, avg_flow_y):
-=======
 """Region of Interest (ROI) Module for Froth Tracker Application.
 
 This module defines the `ROI` class, which represents a region of interest (ROI)
@@ -101,7 +83,6 @@ class ROI:
     def update_cross_position(self, 
                               avg_flow_x: float, 
                               avg_flow_y: float) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Update the cross intersection position based on the optical flow results.
         The position wraps around when it goes out of the ROI.
@@ -126,13 +107,9 @@ class ROI:
         self.cross_position.setX(new_x)
         self.cross_position.setY(new_y)
 
-<<<<<<< HEAD
-    def draw_on_frame(self, frame, roi_index):
-=======
     def draw_on_frame(self, 
                       frame: cv2.Mat, 
                       roi_index: int) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Draws the ROI rectangle, cross position, and scrolling axis on the given frame.
         """
@@ -167,15 +144,11 @@ class ROI:
             cv2.LINE_AA,
         )
     
-<<<<<<< HEAD
-    def update_scrolling_axis(self, movement_buffers, movement_curves, max_frames, plot_widget):
-=======
     def update_scrolling_axis(self, 
                               movement_buffers: dict, 
                               movement_curves: dict, 
                               max_frames: int, 
                               plot_widget: pg.PlotWidget) -> None:
->>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Updates the scrolling axis data and renders it on the plot widget.
         """
