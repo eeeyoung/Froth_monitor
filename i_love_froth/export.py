@@ -1,3 +1,35 @@
+<<<<<<< HEAD
+=======
+"""Export Module for Froth Tracker Application.
+
+This module defines the `Export` class, which provides functionality for
+configuring export settings, collecting ROI data, and saving results to an
+Excel file. The module also supports recording video settings and exporting
+videos to specified directories.
+
+Classes:
+--------
+Export
+    Handles export configuration, data collection, and file writing for
+    ROI analysis and video recording.
+
+Imports:
+--------
+- PySide6.QtWidgets:
+    Provides GUI components such as QDialog, QPushButton, QLineEdit, QLabel, and QCheckBox.
+- PySide6.QtCore:
+    Core functionality for Qt, including Qt constants.
+- PySide6.QtGui:
+    Provides GUI components such as QFont.
+- numpy:
+    For mathematical computations.
+- datetime:
+    For timestamp generation and date manipulation.
+- openpyxl.Workbook:
+    For creating and saving Excel files.
+"""
+
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
 from PySide6.QtWidgets import (QPushButton, QLabel, QFileDialog, 
                                QVBoxLayout, QMessageBox, QDialog, QLineEdit, QCheckBox,
                                QHBoxLayout, QFileDialog, QRadioButton, QFrame)
@@ -9,7 +41,85 @@ from openpyxl import Workbook
 
 
 class Export:
+<<<<<<< HEAD
     def __init__(self, parent=None):
+=======
+    """
+    Export Class for Managing Data and Video Export Settings.
+
+    The `Export` class provides methods for configuring export settings,
+    collecting data from Regions of Interest (ROIs), and saving the data to
+    Excel files. Additionally, it supports settings for video recording,
+    including specifying directories and filenames for video export.
+
+    Attributes:
+    ----------
+    parent : object
+        The parent widget or object for dialog windows.
+    export_directory : str
+        Directory path for saving data export files.
+    video_directory : str
+        Directory path for saving recorded video files.
+    export_filename : str
+        Default filename for exported data, based on the current date.
+    video_filename : str
+        Default filename for recorded video, based on the current date.
+    velocity_sum : float
+        Temporary sum of velocities for calculating averages.
+    save_video_in_same_dir : bool
+        Indicates whether to save video files in the same directory as data files.
+    record_video : bool
+        Indicates whether video recording is enabled.
+    font_big : QFont
+        Font used for larger text elements in the export settings dialog.
+    font_small : QFont
+        Font used for smaller text elements in the export settings dialog.
+
+    Methods:
+    -------
+    __init__(parent: object = None) -> None
+        Initializes the Export class with default settings.
+    export_setting_window() -> None
+        Opens a dialog window for configuring export and video recording settings.
+    add_video_selection_section(layout: QVBoxLayout, dialog: QDialog) -> None
+        Adds video recording configuration options to the export settings dialog.
+    enable_video_recording(if_record_video: bool) -> None
+        Enables or disables video recording.
+    select_video_directory(parent_dialog: object) -> None
+        Opens a file dialog to select the directory for saving recorded videos.
+    select_data_directory(parent_dialog: object) -> None
+        Opens a file dialog to select the directory for saving data files.
+    save_export_settings(dialog: QDialog, filename_input: QLineEdit) -> None
+        Saves the configured export and video recording settings.
+    excel_resutls(rois: list, arrow_angle: float) -> None
+        Exports ROI analysis results to an Excel file.
+    collect_export_data(rois: list, arrow_angle: float) -> dict
+        Collects and structures export data, including ROI movement data and arrow direction.
+    get_average_velocity(velocity: float, frame_count: int, timestamp: str) -> tuple
+        Calculates the average velocity over 15 frames based on the given velocity and timestamps.
+    write_csv(file_path: str, data: dict) -> None
+        Writes the export data to an Excel file with separate sheets for each ROI.
+    """
+    def __init__(self, 
+                 parent: object = None) -> None:
+        """
+        Initializes the Export class with default settings.
+
+        Args:
+            parent (object, optional): The parent widget or object for dialog windows. Defaults to None.
+
+        Attributes:
+            export_directory (str): Directory path for data export.
+            video_directory (str): Directory path for video export.
+            export_filename (str): Default export filename based on the current date.
+            video_filename (str): Default video filename based on the current date.
+            velocity_sum (float): Sum of velocities, initialized to 0.0.
+            save_video_in_same_dir (bool): Flag indicating whether to save video in the same directory as data.
+            record_video (bool): Flag indicating whether video recording is enabled.
+            font_big (QFont): Font used for larger text elements.
+            font_small (QFont): Font used for smaller text elements.
+        """
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.parent = parent
         self.export_directory = ""
         self.video_directory = ""
@@ -23,6 +133,7 @@ class Export:
         self.font_big = QFont("Arial", 13)
         self.font_small = QFont("Arial", 12)
        
+<<<<<<< HEAD
 
     def export_setting_window(self):
         """
@@ -32,6 +143,19 @@ class Export:
         dialog.setWindowTitle("Export Settings")
         dialog.setMinimumWidth(400)
 
+=======
+    def export_setting_window(self) -> None:
+        """
+        Opens a dialog window to set export settings.
+
+        The dialog window consists of input fields for setting the export directory, export filename,
+        and video recording settings. The settings are saved when the user clicks the "Save Settings" button.
+        """
+        
+        dialog = QDialog(self.parent)
+        dialog.setWindowTitle("Export Settings")
+        dialog.setMinimumWidth(400)
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         layout = QVBoxLayout(dialog)
 
         # Export Directory Selection
@@ -39,7 +163,10 @@ class Export:
         directory_label.setFont(self.font_big)
         layout.addWidget(directory_label)
         
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         directory_button = QPushButton("Select Data Directory", dialog)
         directory_button.clicked.connect(lambda: self.select_data_directory(dialog))
         layout.addWidget(directory_button)
@@ -72,9 +199,26 @@ class Export:
 
         dialog.exec()
 
+<<<<<<< HEAD
     def add_video_selection_section(self, layout, dialog):
         
         def update_ui():
+=======
+    def add_video_selection_section(self, 
+                                    layout: QVBoxLayout, 
+                                    dialog: QDialog) -> None:
+        """
+        Add a section to the dialog that allows the user to select whether to save the video in the same directory as the data.
+        
+        The section includes a QLabel, two radio buttons, a checkbox for video recording, a button to set the recording directory, and a QLabel to display the selected recording directory.
+        
+        The checkbox for video recording is initially hidden. If the user selects "No" to save the video in the same directory, the checkbox is shown and the value of self.record_video is copied to its state.
+        
+        If the checkbox is checked, the button to set the recording directory and the display label are shown. Otherwise, they are hidden.
+        """
+        
+        def update_ui() -> None:
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             """
             Update the UI based on whether the user selected to save the video in the same directory.
             
@@ -95,7 +239,11 @@ class Export:
                 recording_video_directory_button.setVisible(self.record_video)
                 recording_video_directory_display.setVisible(self.record_video)
 
+<<<<<<< HEAD
         def on_radio_selection():
+=======
+        def on_radio_selection() -> None:
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
             """
             Handle the event when a radio button is selected.
 
@@ -168,11 +316,33 @@ class Export:
         video_filename_input.setObjectName("video_filename_input")
         layout.addWidget(video_filename_input)
     
+<<<<<<< HEAD
     def enable_video_recording(self, if_record_video):
         self.record_video = if_record_video
         print(self.record_video)
         
     def select_video_directory(self, parent_dialog):
+=======
+    def enable_video_recording(self, 
+                               if_record_video: bool) -> None:
+        """
+        Enables or disables video recording.
+        
+        Args:
+            if_record_video (bool): Flag indicating whether to enable video recording.
+        """
+        self.record_video = if_record_video
+        print(self.record_video)
+        
+    def select_video_directory(self, 
+                               parent_dialog: object) -> None:
+        """
+        Opens a file dialog to select the video recording directory.
+        
+        Args:
+            parent_dialog (object): The parent dialog containing the QLabel to be updated.
+        """
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         directory = QFileDialog.getExistingDirectory(self.parent, "Select Recording Saving Directory")
         
         if directory:
@@ -184,7 +354,12 @@ class Export:
                 print(self.video_directory)
                 directory_display.setText(self.video_directory)
 
+<<<<<<< HEAD
     def select_data_directory(self, parent_dialog):
+=======
+    def select_data_directory(self, 
+                              parent_dialog: object) -> None:
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Opens a file dialog to select the export directory.
         """
@@ -198,7 +373,13 @@ class Export:
             if directory_display:  # Ensure the QLabel is found
                 directory_display.setText(self.export_directory)
 
+<<<<<<< HEAD
     def save_export_settings(self, dialog, filename_input):
+=======
+    def save_export_settings(self, 
+                             dialog: QDialog, 
+                             filename_input: QLineEdit) -> None:
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Saves the export settings.
         """
@@ -240,7 +421,13 @@ class Export:
         
         dialog.accept()
         
+<<<<<<< HEAD
     def excel_resutls(self, rois, arrow_angle):
+=======
+    def excel_resutls(self, 
+                      rois: list, 
+                      arrow_angle: float) -> None:
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Handles exporting data for the program.
         """
@@ -254,7 +441,10 @@ class Export:
             
             # Prepare the full file path
             file_path_csv = f"{self.export_directory}/{self.export_filename}.csv"
+<<<<<<< HEAD
             # file_path_json = f"{self.export_directory}/{self.export_filename}.json"
+=======
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
 
             # Step 1: Collect data
             export_data = self.collect_export_data(rois, arrow_angle)
@@ -273,7 +463,32 @@ class Export:
                                  "Export Failed",
                                  f"An error occurred during export: {e}")
 
+<<<<<<< HEAD
     def collect_export_data(self, rois, arrow_angle):
+=======
+    def collect_export_data(self, 
+                            rois: list, 
+                            arrow_angle: float) -> dict:
+        
+        """
+        Collects and structures export data from the given regions of interest (ROIs).
+
+        This function processes the ROI data by iterating over each ROI and its frame
+        data, calculating the average velocity, and organizing the information into
+        a structured dictionary format. The arrow direction is converted from radians
+        to degrees and included in the export data.
+
+        Args:
+            rois (list): A list of ROIs, each containing an analysis module with
+                frame-level results including velocity and timestamp.
+            arrow_angle (float): The direction of the arrow in radians.
+
+        Returns:
+            dict: A dictionary containing the arrow direction in degrees and an
+            organized list of ROI data with movement data, including frame index,
+            velocity, timestamp, and average velocity.
+        """
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         
         data = {
             "arrow_direction": np.degrees(arrow_angle),  # Convert to degrees
@@ -310,8 +525,35 @@ class Export:
         print(data)
         return data
     
+<<<<<<< HEAD
     def get_average_velocity(self, velocity, frame_count, timestamp):
         
+=======
+    def get_average_velocity(self, 
+                             velocity: float, 
+                             frame_count: int, 
+                             timestamp: str) -> tuple:  
+        """
+        Calculate the average velocity over 15 frames.
+
+        Parameters
+        ----------
+        velocity : float
+            The velocity of the current frame.
+        frame_count : int
+            The number of frames that have been processed so far.
+        timestamp : str
+            The timestamp of the current frame.
+
+        Returns
+        -------
+        average_velocity : float or None
+            The average velocity over the last 15 frames, or None if 15 frames
+            have not been processed yet.
+        frame_count : int
+            The updated frame count.
+        """
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if frame_count == 0:
             self.velocity_sum = 0
             
@@ -332,10 +574,20 @@ class Export:
         else:
             return None, frame_count
         
+<<<<<<< HEAD
     def write_csv(self, file_path, data):
         """
         Writes the export data to an Excel file, with each ROI in a separate sheet.
         """
+=======
+    def write_csv(self, 
+                  file_path: str, 
+                  data: dict) -> None:
+        """
+        Writes the export data to an Excel file, with each ROI in a separate sheet.
+        """
+        
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         wb = Workbook()
 
         # Add the arrow direction in the first sheet

@@ -1,9 +1,86 @@
+<<<<<<< HEAD
 import cv2
 from datetime import datetime
 
 
 class VideoRecorder:
     def __init__(self, file_path = "", file_name="./recording", fps=30, frame_size=(640, 480)):
+=======
+"""Video Recording Module for Froth Tracker Application.
+
+This module defines the `VideoRecorder` class, which is responsible for recording video frames
+and saving them to a file. The class provides methods to start, write, and stop video recording,
+allowing seamless integration with real-time video analysis workflows.
+
+Classes:
+--------
+VideoRecorder
+    Handles video recording operations, including initializing a video writer,
+    writing frames to the video file, and managing recording state.
+
+Imports:
+--------
+- cv2 (OpenCV): For video writing operations.
+- numpy (optional for frame type): For representing video frames as arrays.
+
+Example Usage:
+--------------
+To use the module, instantiate the `VideoRecorder` class with the desired settings,
+start recording, write frames, and stop recording when done.
+"""
+
+import numpy as np
+import cv2
+
+class VideoRecorder:
+    """
+    Video Recorder Class.
+
+    The `VideoRecorder` class handles video recording tasks, including initializing a video writer,
+    writing video frames to a file, and managing the recording state. It supports configurable
+    output file paths, frame rates, and frame sizes.
+
+    Attributes:
+    ----------
+    temp_file_path : str
+        Temporary directory path for storing the video file during recording.
+    file_name : str
+        Name of the video file without extension.
+    recording : bool
+        Indicates whether the recorder is currently recording.
+    writer : cv2.VideoWriter
+        The OpenCV video writer object used for recording.
+    file_path : str
+        Full path to the video file being recorded.
+    fps : int
+        Frame rate (frames per second) for the recording.
+    frame_size : tuple
+        Dimensions (width, height) of the video frames.
+    frame_count : int
+        Counter for the number of frames recorded.
+    frame_1_time : float
+        Timestamp of the first recorded frame.
+    frame_2_time : float
+        Timestamp of the second recorded frame.
+
+    Methods:
+    -------
+    start_recording() -> None
+        Starts recording video to a file. Initializes the video writer.
+    write_frame(frame: np.ndarray) -> None
+        Writes a single frame to the video file.
+    stop_recording() -> None
+        Stops recording and releases resources.
+    is_recording() -> bool
+        Checks if the recorder is currently recording.
+    """
+    
+    def __init__(self, 
+                 file_path: str = "", 
+                 file_name: str = "./recording", 
+                 fps: int = 30, 
+                 frame_size: tuple = (640, 480)) -> None:
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Initialize the VideoRecorder.
         
@@ -13,6 +90,7 @@ class VideoRecorder:
             fps (int): Frames per second for the recording.
             frame_size (tuple): Width and height of the video frames.
         """
+<<<<<<< HEAD
         # self.output_directory = output_directory
         # self.filename_prefix = filename_prefix
         self.temp_file_path = file_path
@@ -36,6 +114,28 @@ class VideoRecorder:
         
         # self.file_path = f"{self.file_name}.mp4"
 
+=======
+        
+        self.temp_file_path = file_path
+        self.file_name = file_name
+
+        self.recording = False
+        self.writer = None
+        self.file_path = None
+        
+        self.fps = fps
+        self.frame_size = frame_size
+        self.frame_count = 0
+        self.frame_1_time = None
+        self.frame_2_time = None
+        
+    def start_recording(self) -> None:
+        """
+        Start recording video to a file.
+        """ 
+        
+        self.file_path = f"{self.temp_file_path}/{self.file_name}.mp4"
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         self.writer = cv2.VideoWriter(
             self.file_path,
             cv2.VideoWriter_fourcc(*'XVID'),
@@ -45,21 +145,34 @@ class VideoRecorder:
         
         self.recording = True
         print(f"Recording started. Saving to {self.file_path}")
+<<<<<<< HEAD
 
     def write_frame(self, frame):
+=======
+        
+    def write_frame(self, frame: np.ndarray) -> None:
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Write a single frame to the video file.
         
         Args:
             frame: The video frame to write.
         """
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         if self.recording and self.writer.isOpened():
             self.writer.write(frame)
             print("Frame written to video file")
         else:
             print("Writer is not opened or recording is stopped")
 
+<<<<<<< HEAD
     def stop_recording(self):
+=======
+    def stop_recording(self) -> None:
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Stop recording and release resources.
         """
@@ -69,7 +182,11 @@ class VideoRecorder:
         self.recording = False
         print(f"Recording stopped. Video saved at {self.file_path}")
 
+<<<<<<< HEAD
     def is_recording(self):
+=======
+    def is_recording(self) -> bool:
+>>>>>>> 1109b73 (Completion of docstrings, test files and poetry dependencies file)
         """
         Check if the recorder is currently recording.
         
