@@ -1,0 +1,2 @@
+The `AutoSaver` class, which provides functionality for automatic saving 
+and loading of application data, will save the JSON file in this directory.
