@@ -1,5 +1,27 @@
-# Froth_monitor - A program for tracking the movement of froths of froth flotation in mineral processing
+# Froth monitor
+---
+Froth Tracker is an interactive GUI application for analyzing froth videos in real-time or offline. It allows users to draw Regions of Interest (ROIs), track froth movement using optical flow algorithm (more algorithms in the future), and export detailed analysis results, including velocity data, timestamps, and average velocity.
 
+## Features
+- Real-time froth movement tracking via live camera input.
+- Supports video imports in popular formats (e.g., MP4, AVI).
+- Draw, manage, and analyze multiple Regions of Interest (ROIs).
+- Advanced velocity analysis using dense optical flow (Farneback method).
+- Real-time visualization of movement and scrolling axis.
+- Data export in CSV and Excel formats, with customizable settings.
+- Integrated video recording with timestamped frame analysis.
+
+## Demo
+
+
+
+## Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/gyyyno1/Froth_monitor.git
+
+__________________________________________________________________________________________________________________________________________________________________
 # Update: 21st Nov 2024
 ### Work in Progress
 
