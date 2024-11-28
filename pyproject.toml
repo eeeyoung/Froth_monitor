@@ -21,6 +21,10 @@ importlib-metadata = "^8.5.0"
 [tool.poetry.group.dev.dependencies]
 shiboken6 = "^6.8.0.2"
 
+[tool.poetry.scripts]
+froth-tracker = "i_love_froth.__main__:main"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+

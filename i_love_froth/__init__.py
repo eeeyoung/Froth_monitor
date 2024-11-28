@@ -7,6 +7,6 @@ from .video_recorder import VideoRecorder
 from .roi import ROI
 from .export import Export
 
-# from importlib.metadata import version
+from importlib.metadata import version
 
-# __version__ = version(__name__)
+__version__ = version(__name__)
