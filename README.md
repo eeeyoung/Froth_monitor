@@ -36,8 +36,13 @@ Froth monitor is an interactive GUI application for analyzing froth videos in re
    ```
    pip intall -r requirements.txt
    ```
+
+4. Make sure the package is intalled in editable mode:
+   ```
+   pip install -e .
+   ```
    
-4. Run the application by poetry
+5. Run the application by poetry
    ```
    poetry run python -m i_love_froth
    ```
