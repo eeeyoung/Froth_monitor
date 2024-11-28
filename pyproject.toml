@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Yiyang <eeeyoung2001@gmail.com>"]
 readme = "README.md"
+packages = [{ include = "i_love_froth" }]
 
 [tool.poetry.dependencies]
 python = ">=3.12,<3.14"
@@ -15,6 +16,7 @@ pyqtgraph = "^0.13.7"
 PySide6 = "^6.8.0.2"
 pytest = "^8.3.3"
 pytest-qt = "^4.4.0"
+importlib-metadata = "^8.5.0"
 
 [tool.poetry.group.dev.dependencies]
 shiboken6 = "^6.8.0.2"
