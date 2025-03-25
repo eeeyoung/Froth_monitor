@@ -30,14 +30,14 @@ Froth monitor is an interactive GUI application for analyzing froth videos in re
 3. Install dependencies by poetry
    ```
    pipx install poetry
-   poetry instsall
+   poetry install
    ```
    , or to build the environment without using poetry:
    ```
-   pip intall -r requirements.txt
+   pip install -r requirements.txt
    ```
 
-4. Make sure the package is intalled in editable mode:
+4. Make sure the package is installed in editable mode:
    ```
    pip install -e .
    ```
@@ -46,7 +46,7 @@ Froth monitor is an interactive GUI application for analyzing froth videos in re
    ```
    poetry run python -m i_love_froth
    ```
-   , or to run it in local environment
+   , or to run it in the local environment
    ```
    python -m i_love_froth
    ```
@@ -90,7 +90,7 @@ ________________________________________________________________________________
 ### To be realised (* means already done)
 1. csv*
 2. stop and restart new databook*
-3. angle in degrees with manual typing (pre-set values choices)
+3. angle in degrees with manual typing (pre-set value choices)
 4. programmed video with disappearing bubbles
 
 
@@ -106,6 +106,6 @@ ________________________________________________________________________________
 
 5. Movement analysis is executed within each region of interest (ROI). You can draw one ROI on the video after click the 'Add ROI' button. You are not allowed to do so before inputting a video source.
 
-6. A simple real-time data graph will display in cartesian coordinate system, which the y values shows the average velocities per second w.r.t. overflow direction.
+6. A simple real-time data graph will display in Cartesian coordinate system, which the y values shows the average velocities per second w.r.t. overflow direction.
 
 7. After a video is finished, click the button 'export' to produce a excel databook, with each sheet refers to an ROI.
