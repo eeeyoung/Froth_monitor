@@ -4,7 +4,9 @@ certifi==2024.8.30
 charset-normalizer==3.4.0
 docutils==0.21.2
 et_xmlfile==2.0.0
+
 -e git+https://github.com/gyyyno1/Froth_monitor.git@4c374bd64df5ed973edf69256bda56edf272440c#egg=i_love_froth
+
 idna==3.10
 imagesize==1.4.1
 iniconfig==2.0.0
