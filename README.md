@@ -44,11 +44,11 @@ Froth monitor is an interactive GUI application for analyzing froth videos in re
    
 5. Run the application by poetry
    ```
-   poetry run python -m i_love_froth
+   poetry run python -m froth_monitor
    ```
    , or to run it in the local environment
    ```
-   python -m i_love_froth
+   python -m froth_monitor
    ```
 __________________________________________________________________________________________________________________________________________________________________
 # Update: 21st Nov 2024
